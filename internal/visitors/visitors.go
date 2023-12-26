@@ -167,6 +167,10 @@ func getIdentOfTypeExpr(pkg *packages.Package, ty ast.Expr) []*ast.Ident {
 	case *ast.ChanType:
 		return nil
 
+  // TODO:
+	case *ast.Ellipsis:
+		return nil
+
 	default:
 		_ = handler.ErrOrPanic("Unhandled named struct field: %T %+v\n%s", ty, ty, pkg.Fset.Position(ty.Pos()))
 		return nil

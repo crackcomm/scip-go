@@ -85,6 +85,14 @@ func LoadPackages(
 		if err != nil {
 			return err
 		}
+		for _, pkg := range pkgs {
+			if pkg.Module == nil {
+				pkg.Module = &packages.Module{
+					Path:    opts.ModulePath,
+					Version: opts.ModuleVersion,
+				}
+			}
+		}
 
 		for _, pkg := range pkgs {
 			addImportsToPkgs(pkgLookup, &opts, pkg)
@@ -152,15 +160,11 @@ func normalizePackage(opts *config.IndexOpts, pkg *packages.Package) *packages.P
 		// We strip that to standardize all the libraries to make sure we are able to jump-to-definition
 		// of the standard library.
 		pkg.PkgPath = strings.TrimPrefix(pkg.PkgPath, "std/")
-	} else {
-		if pkg.Module == nil {
-			panic(fmt.Sprintf(
-				"Should not be possible to have nil module for userland package: %s %s",
-				pkg,
-				pkg.PkgPath,
-			))
+	} else if pkg.Module == nil {
+		pkg.Module = &packages.Module{
+			Path:    pkg.PkgPath,
+			Version: fmt.Sprintf("%s@%s", opts.ModulePath, opts.ModuleVersion),
 		}
-
 	}
 
 	// Follow replaced modules

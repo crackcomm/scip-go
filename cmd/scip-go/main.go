@@ -111,6 +111,9 @@ func mainErr() error {
 	output.Println("scip-go")
 
 	modulePath, isStdLib, err := modules.ModuleName(moduleRoot, repositoryRemote, moduleName)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	output.Println("  Go standard library version: ", goVersion)
 	output.Println("  Resolved module name       : ", modulePath)

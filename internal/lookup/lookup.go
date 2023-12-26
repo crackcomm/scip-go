@@ -45,13 +45,6 @@ func (p *Package) SymbolsForFile(file *token.File) []*scip.SymbolInformation {
 }
 
 func (p *Package) Set(pos token.Pos, symbol *scip.SymbolInformation) {
-	// TODO: Could remove this once we are 100% confident we're not overlapping...
-	if original, ok := p.fields[pos]; ok {
-		if original != symbol {
-			panic(fmt.Sprintf("Cannot add pos to new symbol: %s %s", original, symbol))
-		}
-	}
-
 	p.fields[pos] = symbol
 }
 
